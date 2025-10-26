@@ -11,6 +11,15 @@ public class MobStatsYMLManager {
     }
 
     public MobStats getMobStatsFromYml(String name) {
+        if (name.contains("§")) { // removing color from name
+            StringBuilder stringBuilder = new StringBuilder(name);
+            int index = name.indexOf("§");
+
+            stringBuilder.deleteCharAt(index + 1);
+            stringBuilder.deleteCharAt(index);
+            name = stringBuilder.toString();
+        }
+
         if (!config.isConfigurationSection(name)) return null;
 
         int level = config.getInt(name + ".level");

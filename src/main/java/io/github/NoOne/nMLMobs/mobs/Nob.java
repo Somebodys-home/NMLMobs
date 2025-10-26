@@ -13,12 +13,12 @@ public class Nob {
     public Nob(NMLMobs nmlMobs, Location location) {
         Slime nob = (Slime) location.getWorld().spawnEntity(location, EntityType.SLIME);
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("Nob the Glob");
-        AttributeInstance attributeInstance = nob.getAttribute(Attribute.MAX_HEALTH);
 
         nob.setCustomName("§aNob the Glob");
         nob.setCustomNameVisible(true);
         nob.setSize(2);
-        attributeInstance.setBaseValue(mobStats.getMaxHealth());
+        nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
+        nob.getAttribute(Attribute.SCALE).setBaseValue(.5);
         nob.setHealth(mobStats.getMaxHealth());
         nob.setMetadata("nml", new FixedMetadataValue(nmlMobs, true));
     }

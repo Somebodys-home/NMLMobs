@@ -26,19 +26,9 @@ public class MobsListener implements Listener {
         if (damager.hasMetadata("nml")) {
             event.setCancelled(true);
 
-            String name = damager.getName();
-            if (name.contains("§")) {
-                StringBuilder stringBuilder = new StringBuilder(name);
-                int index = name.indexOf("§");
+            MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(damager.getName());
 
-                stringBuilder.deleteCharAt(index + 1);
-                stringBuilder.deleteCharAt(index);
-                name = stringBuilder.toString();
-
-                MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(name);
-
-                Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager, DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages())));
-            }
+            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager, DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages())));
         }
     }
 

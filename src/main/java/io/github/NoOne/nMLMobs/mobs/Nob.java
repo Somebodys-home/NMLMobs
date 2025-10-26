@@ -5,17 +5,14 @@ import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class Nob {
     public Nob(NMLMobs nmlMobs, Location location) {
         Slime nob = (Slime) location.getWorld().spawnEntity(location, EntityType.SLIME);
-        MobStats mobStats = nmlMobs.getMobProfileManager().getMobStatsFromYml("Nob the Glob");
+        MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("Nob the Glob");
         AttributeInstance attributeInstance = nob.getAttribute(Attribute.MAX_HEALTH);
 
         nob.setCustomName("§aNob the Glob");

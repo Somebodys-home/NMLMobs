@@ -5,7 +5,6 @@ import io.github.Gabriel.damagePlugin.customDamage.DamageConverter;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +15,7 @@ public class MobsListener implements Listener {
     private MobStatsYMLManager mobStatsYMLManager;
 
     public MobsListener(NMLMobs nmlMobs) {
-        mobStatsYMLManager = nmlMobs.getMobProfileManager();
+        mobStatsYMLManager = nmlMobs.getMobStatsYMLManager();
     }
 
     @EventHandler

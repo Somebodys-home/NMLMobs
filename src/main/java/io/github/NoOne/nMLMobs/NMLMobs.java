@@ -22,7 +22,7 @@ public final class NMLMobs extends JavaPlugin {
         return mobStatsYmlConfig;
     }
 
-    public MobStatsYMLManager getMobProfileManager() {
+    public MobStatsYMLManager getMobStatsYMLManager() {
         return mobStatsYMLManager;
     }
 }

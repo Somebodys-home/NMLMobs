@@ -1,0 +1,10 @@
+name: NMLMobs
+version: '1.0'
+main: io.github.NoOne.nMLMobs.NMLMobs
+api-version: '1.21'
+depend:
+  - DamagePlugin
+commands:
+  nmlSummon:
+    description: Spawns a custom NML mob
+    usage: /<command> <name>

@@ -12,9 +12,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class Nob {
     public Nob(NMLMobs nmlMobs, Location location) {
         Slime nob = (Slime) location.getWorld().spawnEntity(location, EntityType.SLIME);
-        MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("Nob the Glob");
+        MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§aNob the Glob");
 
-        nob.setCustomName("§aNob the Glob");
+        nob.setCustomName("§fLv. §b" + mobStats.getLevel() + " §aNob the Glob");
         nob.setCustomNameVisible(true);
         nob.setSize(2);
         nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());

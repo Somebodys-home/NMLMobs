@@ -4,6 +4,8 @@ main: io.github.NoOne.nMLMobs.NMLMobs
 api-version: '1.21'
 depend:
   - DamagePlugin
+loadbefore:
+  - DamagePlugin
 commands:
   nmlSummon:
     description: Spawns a custom NML mob

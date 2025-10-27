@@ -11,13 +11,9 @@ public class MobStatsYMLManager {
     }
 
     public MobStats getMobStatsFromYml(String name) {
-        if (name.contains("§")) { // removing color from name
-            StringBuilder stringBuilder = new StringBuilder(name);
-            int index = name.indexOf("§");
-
-            stringBuilder.deleteCharAt(index + 1);
-            stringBuilder.deleteCharAt(index);
-            name = stringBuilder.toString();
+        // removing color from name
+        if (name.contains("§")) {
+            name = name.replaceAll("§[0-9a-fk-or]", "");
         }
 
         if (!config.isConfigurationSection(name)) return null;

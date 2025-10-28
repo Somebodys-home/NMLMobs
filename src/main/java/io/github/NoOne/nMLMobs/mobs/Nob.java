@@ -26,17 +26,13 @@ public class Nob {
 
     public Nob(NMLMobs nmlMobs, Location location) {
         this.nmlMobs = nmlMobs;
-        Slime nob = (Slime) location.getWorld().spawnEntity(location, EntityType.SLIME);
+        Slime nob = (Slime) NMLMobTemplate.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob");
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§aNob the Glob");
 
-        nob.setCustomName("§fLv. §b" + mobStats.getLevel() + " §aNob the Glob");
-        nob.setCustomNameVisible(true);
         nob.setSize(2);
-        nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
         nob.getAttribute(Attribute.SCALE).setBaseValue(.5);
-        nob.setHealth(mobStats.getMaxHealth());
-        nob.setPersistent(true);
-        nob.setMetadata("nml", new FixedMetadataValue(nmlMobs, true));
+        nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
+        nob.setHealth(mobStats.getMaxHealth()); // have to do this for slimes
 
         new BukkitRunnable() {
             @Override
@@ -79,86 +75,67 @@ public class Nob {
     private void bigJump(Slime nob, MobStats mobStats) {
         nob.setAI(false);
 
-        new BukkitRunnable() {
-            int timer = 0;
-
+        NMLMobTemplate.useAbility(nob, 30, Particle.ITEM_SLIME, new BukkitRunnable() {
             @Override
             public void run() {
-                timer++;
+                nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 1f, 1f);
+                nob.setAI(true);
+                nob.setMetadata("falling", new FixedMetadataValue(nmlMobs, true));
+                nob.setVelocity(new Vector());
 
-                double radius = 3 * (1 - (timer / 35.0));
-                int particleCount = 75;
-                Location base = nob.getLocation().clone();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        nob.setVelocity(nob.getLocation().getDirection().multiply(.5).setY(1));
+                    }
+                }.runTaskLater(nmlMobs, 1L);
 
-                for (int i = 0; i < particleCount; i++) {
-                    double angle = 2 * Math.PI * i / particleCount;
-                    double x = Math.cos(angle) * radius;
-                    double z = Math.sin(angle) * radius;
-                    Location particleLocation = base.clone().add(x, 0, z);
-
-                    nob.getWorld().spawnParticle(Particle.ITEM_SLIME, particleLocation, 1, 0, 0, 0, 0);
-                }
-
-                if (timer == 30) {
-                    nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 1f, 1f);
-                    nob.setAI(true);
-                    nob.setMetadata("falling", new FixedMetadataValue(nmlMobs, true));
-                    nob.setVelocity(new Vector());
-
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            nob.setVelocity(nob.getLocation().getDirection().multiply(.5).setY(1));
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (nob.isDead()) {
+                            cancel();
+                            return;
                         }
-                    }.runTaskLater(nmlMobs, 1L);
 
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (nob.isDead()) {
-                                cancel();
-                                return;
+                        if (nob.isOnGround()) {
+                            double radius = 3;
+                            int particleCount = 200;
+                            Location base = nob.getLocation().clone().add(0, 0.5, 0);
+                            HashSet<UUID> hitEntityUUIDs = new HashSet<>();
+
+                            for (int i = 0; i < particleCount; i++) {
+                                double r = radius * Math.sqrt(Math.random());
+                                double angle = Math.random() * 2 * Math.PI;
+                                double x = r * Math.cos(angle);
+                                double z = r * Math.sin(angle);
+
+                                Location loc = base.clone().add(x, 0, z);
+                                nob.getWorld().spawnParticle(Particle.ITEM_SLIME, loc, 1, 0, 0, 0, 0);
                             }
 
-                            if (nob.isOnGround()) {
-                                double radius = 3;
-                                int particleCount = 200;
-                                Location base = nob.getLocation().clone().add(0, 0.5, 0);
-                                HashSet<UUID> hitEntityUUIDs = new HashSet<>();
-
-                                for (int i = 0; i < particleCount; i++) {
-                                    double r = radius * Math.sqrt(Math.random());
-                                    double angle = Math.random() * 2 * Math.PI;
-                                    double x = r * Math.cos(angle);
-                                    double z = r * Math.sin(angle);
-
-                                    Location loc = base.clone().add(x, 0, z);
-                                    nob.getWorld().spawnParticle(Particle.ITEM_SLIME, loc, 1, 0, 0, 0, 0);
+                            for (Entity entity : nob.getWorld().getNearbyEntities(nob.getLocation(), 3, 1, 3)) {
+                                if (!entity.equals(nob)) {
+                                    hitEntityUUIDs.add(entity.getUniqueId());
                                 }
-
-                                for (Entity entity : nob.getWorld().getNearbyEntities(nob.getLocation(), 3, 1, 3)) {
-                                    if (!entity.equals(nob)) {
-                                        hitEntityUUIDs.add(entity.getUniqueId());
-                                    }
-                                }
-
-                                for (UUID uuid : hitEntityUUIDs) {
-                                    if (Bukkit.getEntity(uuid) instanceof LivingEntity livingEntity) {
-                                        Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, nob,
-                                        DamageConverter.multiplyDamageMap(DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
-                                    }
-                                }
-
-                                nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 2f, .5f);
-                                nob.removeMetadata("falling", nmlMobs);
-                                cancel();
                             }
-                        }
-                    }.runTaskTimer(nmlMobs, 5L, 1L);
 
-                    cancel();
-                }
+                            for (UUID uuid : hitEntityUUIDs) {
+                                if (Bukkit.getEntity(uuid) instanceof LivingEntity livingEntity) {
+                                    Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, nob,
+                                            DamageConverter.multiplyDamageMap(DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
+                                }
+                            }
+
+                            nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 2f, .5f);
+                            nob.removeMetadata("falling", nmlMobs);
+                            cancel();
+                        }
+                    }
+                }.runTaskTimer(nmlMobs, 5L, 1L);
+
+                cancel();
             }
-        }.runTaskTimer(nmlMobs, 0L, 1L);
+        });
     }
 }

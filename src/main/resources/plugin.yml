@@ -10,3 +10,6 @@ commands:
   nmlSummon:
     description: Spawns a custom NML mob
     usage: /<command> <name>
+  nmlKill:
+    description: Removes all NML mobs in a range
+    usage: /<command> <range>

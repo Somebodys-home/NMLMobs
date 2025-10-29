@@ -26,13 +26,14 @@ public class Nob {
 
     public Nob(NMLMobs nmlMobs, Location location) {
         this.nmlMobs = nmlMobs;
-        Slime nob = (Slime) NMLMobTemplate.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob");
+        Slime nob = (Slime) NMLMobTemplate.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob", false);
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§aNob the Glob");
 
+        // have to do this for slimes
         nob.setSize(2);
         nob.getAttribute(Attribute.SCALE).setBaseValue(.5);
         nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
-        nob.setHealth(mobStats.getMaxHealth()); // have to do this for slimes
+        nob.setHealth(mobStats.getMaxHealth());
 
         new BukkitRunnable() {
             @Override
@@ -75,7 +76,7 @@ public class Nob {
     private void bigJump(Slime nob, MobStats mobStats) {
         nob.setAI(false);
 
-        NMLMobTemplate.useAbility(nob, 30, Particle.ITEM_SLIME, new BukkitRunnable() {
+        NMLMobTemplate.useAbility(nob, 20, Particle.ITEM_SLIME, new BukkitRunnable() {
             @Override
             public void run() {
                 nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 1f, 1f);

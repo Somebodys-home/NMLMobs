@@ -1,6 +1,8 @@
-package io.github.NoOne.nMLMobs;
+package io.github.NoOne.nMLMobs.commands;
 
+import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobs.Nob;
+import io.github.NoOne.nMLMobs.mobs.TrainingDummy;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,6 +33,7 @@ public class NMLSummonCommand implements CommandExecutor, TabCompleter {
 
             switch (args[0]) {
                 case "nob" -> new Nob(nmlMobs, spawnLocation);
+                case "dummy" -> new TrainingDummy(nmlMobs, spawnLocation);
             }
         }
 
@@ -40,7 +43,7 @@ public class NMLSummonCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (strings.length == 1) {
-            return new ArrayList<>(List.of("nob")).stream()
+            return new ArrayList<>(List.of("nob", "dummy")).stream()
                     .filter(string -> string.toLowerCase().startsWith(strings[0].toLowerCase()))
                     .collect(Collectors.toList());
         }

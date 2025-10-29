@@ -1,5 +1,7 @@
 package io.github.NoOne.nMLMobs;
 
+import io.github.NoOne.nMLMobs.commands.NMLKillCommand;
+import io.github.NoOne.nMLMobs.commands.NMLSummonCommand;
 import io.github.NoOne.nMLMobs.mobs.NMLMobTemplate;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLConfig;
@@ -24,6 +26,7 @@ public final class NMLMobs extends JavaPlugin {
         nmlMobTemplate = new NMLMobTemplate(this);
 
         getCommand("nmlsummon").setExecutor(new NMLSummonCommand(this));
+        getCommand("nmlkill").setExecutor(new NMLKillCommand());
         getServer().getPluginManager().registerEvents(new MobsListener(this), this);
     }
 

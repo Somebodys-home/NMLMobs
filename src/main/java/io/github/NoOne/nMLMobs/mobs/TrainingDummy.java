@@ -4,7 +4,6 @@ import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,7 +11,7 @@ public class TrainingDummy {
     public TrainingDummy(NMLMobs nmlMobs, Location location) {
         location.clone().setYaw(location.getYaw() + 180F);
 
-        IronGolem trainingDummy = (IronGolem) NMLMobTemplate.makeNMlMob(nmlMobs, location, EntityType.IRON_GOLEM, "§cTraining Dummy", false);
+        IronGolem trainingDummy = (IronGolem) NMLMobHelper.makeNMlMob(nmlMobs, location, EntityType.IRON_GOLEM, "§cTraining Dummy", false);
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§cTraining Dummy");
         Location loc = trainingDummy.getLocation();
 
@@ -29,7 +28,7 @@ public class TrainingDummy {
     }
 
     private void fullHeal(IronGolem trainingDummy, MobStats mobStats) {
-        NMLMobTemplate.useAbility(trainingDummy, 30, Particle.END_ROD, new BukkitRunnable() {
+        NMLMobHelper.useAbility(trainingDummy, 30, Particle.END_ROD, new BukkitRunnable() {
             @Override
             public void run() {
                 trainingDummy.setHealth(mobStats.getMaxHealth());

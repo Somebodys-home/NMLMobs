@@ -1,21 +1,40 @@
 package io.github.NoOne.nMLMobs;
 
-import io.github.Gabriel.damagePlugin.customDamage.CustomDamageEvent;
-import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
+import io.github.NoOne.damagePlugin.customDamage.CustomDamageEvent;
+import io.github.NoOne.damagePlugin.customDamage.DamageConverter;
+import io.github.NoOne.nMLMobs.mobstats.MobStats;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class MobsListener implements Listener {
+    private NMLMobs nmlMobs;
     private MobHealthBarManager mobHealthBarManager;
 
     public MobsListener(NMLMobs nmlMobs) {
+        this.nmlMobs = nmlMobs;
         mobHealthBarManager = nmlMobs.getMobHealthBarManager();
+    }
+
+    @EventHandler
+    public void nmlMobDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity target)) return;
+        if (!(event.getDamager() instanceof LivingEntity damager)) return;
+        if (target.hasMetadata("punched") || damager.hasMetadata("punched")) return; // recursion block
+        if (damager.hasMetadata("nml")) {
+            event.setCancelled(true);
+
+            MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml(damager.getName());
+
+            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager, DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), true));
+        }
     }
 
     @EventHandler

@@ -10,10 +10,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class NMLMobTemplate {
+public class NMLMobHelper {
     private static NMLMobs nmlMobs;
 
-    public NMLMobTemplate(NMLMobs nmlMobs) {
+    public NMLMobHelper(NMLMobs nmlMobs) {
         this.nmlMobs = nmlMobs;
     }
 

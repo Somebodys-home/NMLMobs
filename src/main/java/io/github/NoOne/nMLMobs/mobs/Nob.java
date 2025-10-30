@@ -1,24 +1,19 @@
 package io.github.NoOne.nMLMobs.mobs;
 
-import io.github.Gabriel.damagePlugin.customDamage.CustomDamageEvent;
-import io.github.Gabriel.damagePlugin.customDamage.DamageConverter;
+import io.github.NoOne.damagePlugin.customDamage.CustomDamageEvent;
+import io.github.NoOne.damagePlugin.customDamage.DamageConverter;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Slime;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class Nob {
@@ -26,7 +21,7 @@ public class Nob {
 
     public Nob(NMLMobs nmlMobs, Location location) {
         this.nmlMobs = nmlMobs;
-        Slime nob = (Slime) NMLMobTemplate.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob", false);
+        Slime nob = (Slime) NMLMobHelper.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob", false);
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§aNob the Glob");
 
         // have to do this for slimes
@@ -76,7 +71,7 @@ public class Nob {
     private void bigJump(Slime nob, MobStats mobStats) {
         nob.setAI(false);
 
-        NMLMobTemplate.useAbility(nob, 20, Particle.ITEM_SLIME, new BukkitRunnable() {
+        NMLMobHelper.useAbility(nob, 20, Particle.ITEM_SLIME, new BukkitRunnable() {
             @Override
             public void run() {
                 nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 1f, 1f);

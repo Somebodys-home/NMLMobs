@@ -4,6 +4,7 @@ import io.github.NoOne.damagePlugin.customDamage.CustomDamageEvent;
 import io.github.NoOne.damagePlugin.customDamage.DamageConverter;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,13 +28,20 @@ public class MobsListener implements Listener {
     public void nmlMobDamage(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity target)) return;
         if (!(event.getDamager() instanceof LivingEntity damager)) return;
-        if (target.hasMetadata("punched") || damager.hasMetadata("punched")) return; // recursion block
+        if (target.hasMetadata("punched")) { // recursion block
+            target.removeMetadata("punched", nmlMobs.getDamagePlugin());
+            return;
+        }
+
         if (damager.hasMetadata("nml")) {
             event.setCancelled(true);
 
-            MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml(damager.getName());
+            if (target.getNoDamageTicks() == 0) {
+                MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml(damager.getName());
 
-            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager, DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), true));
+                Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager,
+                        DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), true));
+            }
         }
     }
 

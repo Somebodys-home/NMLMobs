@@ -28,10 +28,7 @@ public class MobsListener implements Listener {
     public void nmlMobDamage(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity target)) return;
         if (!(event.getDamager() instanceof LivingEntity damager)) return;
-        if (target.hasMetadata("punched")) { // recursion block
-            target.removeMetadata("punched", nmlMobs.getDamagePlugin());
-            return;
-        }
+        if (target.hasMetadata("punched")) return; // recursion block in damageplugin
 
         if (damager.hasMetadata("nml")) {
             event.setCancelled(true);

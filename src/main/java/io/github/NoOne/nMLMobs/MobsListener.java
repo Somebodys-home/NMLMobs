@@ -44,9 +44,9 @@ public class MobsListener implements Listener {
 
     @EventHandler
     public void updateHealthBar(CustomDamageEvent event) {
-        if (!(event.getDamager() instanceof LivingEntity damager)) return;
         if (!(event.getTarget() instanceof LivingEntity target)) return;
-        if (damager instanceof Player player) mobHealthBarManager.updateLastHitMob(player, target);
+        if (target.hasMetadata("hologram")) return;
+        if (event.getDamager() instanceof Player player) mobHealthBarManager.updateLastHitMob(player, target);
     }
 
     @EventHandler

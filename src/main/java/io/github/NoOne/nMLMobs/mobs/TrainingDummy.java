@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 public class TrainingDummy {
     public TrainingDummy(NMLMobs nmlMobs, Location location) {
@@ -18,11 +19,14 @@ public class TrainingDummy {
         loc.setYaw(loc.getYaw() + 180F); // turn it around
         trainingDummy.teleport(loc);
         trainingDummy.setAI(false);
+        trainingDummy.setGravity(true);
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                fullHeal(trainingDummy, mobStats);
+                if (trainingDummy.getHealth() < trainingDummy.getMaxHealth()) {
+                    fullHeal(trainingDummy, mobStats);
+                }
             }
         }.runTaskTimer(nmlMobs, 300L, 300L);
     }

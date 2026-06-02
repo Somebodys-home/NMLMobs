@@ -23,10 +23,7 @@ public class MobsListener implements Listener {
 
     @EventHandler
     public void nmlMobDamagePlayer(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player target)) return;
-        if (!(event.getDamager() instanceof LivingEntity damager)) return;
-        if (target.getNoDamageTicks() > 0) return;
-
+        if (!(event.getDamager() instanceof LivingEntity damager) || !(event.getEntity() instanceof LivingEntity target)) return;
         if (damager.hasMetadata("nml")) {
             event.setCancelled(true);
 

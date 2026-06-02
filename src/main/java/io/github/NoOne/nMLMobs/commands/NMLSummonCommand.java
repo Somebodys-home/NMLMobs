@@ -27,13 +27,11 @@ public class NMLSummonCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            Location baseLocation = player.getLocation();
-            Vector forward = baseLocation.getDirection().setY(0).normalize().multiply(3);
-            Location spawnLocation = baseLocation.clone().add(forward);
+            Location playerLocation = player.getLocation();
 
             switch (args[0]) {
-                case "nob" -> new Nob(nmlMobs, spawnLocation);
-                case "dummy" -> new TrainingDummy(nmlMobs, spawnLocation);
+                case "nob" -> new Nob(nmlMobs, playerLocation);
+                case "dummy" -> new TrainingDummy(nmlMobs, playerLocation);
             }
         }
 
@@ -41,10 +39,10 @@ public class NMLSummonCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (strings.length == 1) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        if (args.length == 1) {
             return new ArrayList<>(List.of("nob", "dummy")).stream()
-                    .filter(string -> string.toLowerCase().startsWith(strings[0].toLowerCase()))
+                    .filter(string -> string.toLowerCase().startsWith(args[0].toLowerCase()))
                     .collect(Collectors.toList());
         }
 

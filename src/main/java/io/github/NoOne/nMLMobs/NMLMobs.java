@@ -3,7 +3,7 @@ package io.github.NoOne.nMLMobs;
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLMobs.commands.NMLKillCommand;
 import io.github.NoOne.nMLMobs.commands.NMLSummonCommand;
-import io.github.NoOne.nMLMobs.mobs.NMLMobHelper;
+import io.github.NoOne.nMLMobs.mobs.NMLMobSystem;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLConfig;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,14 +13,14 @@ public final class NMLMobs extends JavaPlugin {
     private MobStatsYMLConfig mobStatsYmlConfig;
     private MobStatsYMLManager mobStatsYMLManager;
     private MobHealthBarManager mobHealthBarManager;
-    private NMLMobHelper nmlMobHelper;
+    private NMLMobSystem nmlMobSystem;
 
     @Override
     public void onEnable() {
         damagePlugin = JavaPlugin.getPlugin(DamagePlugin.class);
 
         mobStatsYmlConfig = new MobStatsYMLConfig(this, "mobstats");
-        nmlMobHelper = new NMLMobHelper(this);
+        nmlMobSystem = new NMLMobSystem(this);
 
         mobStatsYMLManager = new MobStatsYMLManager(this);
         mobStatsYmlConfig.loadConfig();
@@ -54,7 +54,7 @@ public final class NMLMobs extends JavaPlugin {
         return mobHealthBarManager;
     }
 
-    public NMLMobHelper getNmlMobTemplate() {
-        return nmlMobHelper;
+    public NMLMobSystem getNmlMobTemplate() {
+        return nmlMobSystem;
     }
 }

@@ -4,38 +4,40 @@ import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 public class TrainingDummy {
     public TrainingDummy(NMLMobs nmlMobs, Location location) {
-        location.clone().setYaw(location.getYaw() + 180F);
-
-        IronGolem trainingDummy = (IronGolem) NMLMobHelper.makeNMlMob(nmlMobs, location, EntityType.IRON_GOLEM, "§cTraining Dummy", false);
+        IronGolem trainingDummy = (IronGolem) NMLMobSystem.makeNMlMob(nmlMobs, location, EntityType.IRON_GOLEM, "§cTraining Dummy", false);
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§cTraining Dummy");
-        Location loc = trainingDummy.getLocation();
 
-        loc.setYaw(loc.getYaw() + 180F); // turn it around
-        trainingDummy.teleport(loc);
         trainingDummy.setAI(false);
-        trainingDummy.setGravity(true);
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (trainingDummy.getHealth() < trainingDummy.getMaxHealth()) {
-                    fullHeal(trainingDummy, mobStats);
+                    fullHeal(trainingDummy, mobStats, location);
+                }
+
+                if (trainingDummy.isDead()) {
+                    cancel();
                 }
             }
         }.runTaskTimer(nmlMobs, 300L, 300L);
     }
 
-    private void fullHeal(IronGolem trainingDummy, MobStats mobStats) {
-        NMLMobHelper.useAbility(trainingDummy, 30, Particle.END_ROD, new BukkitRunnable() {
+    private void fullHeal(IronGolem trainingDummy, MobStats mobStats, Location location) {
+        NMLMobSystem.useAbility(trainingDummy, 30, Particle.END_ROD, new BukkitRunnable() {
             @Override
             public void run() {
                 trainingDummy.setHealth(mobStats.getMaxHealth());
+
+                if (trainingDummy.getLocation().toVector().subtract(location.toVector()).length() > .5) {
+                    trainingDummy.teleport(location);
+                }
             }
         });
     }

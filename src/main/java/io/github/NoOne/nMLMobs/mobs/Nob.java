@@ -1,15 +1,12 @@
 package io.github.NoOne.nMLMobs.mobs;
 
 import io.github.NoOne.damagePlugin.customDamage.CustomDamageEvent;
-import io.github.NoOne.damagePlugin.customDamage.DamageConverter;
+import io.github.NoOne.damagePlugin.customDamage.DamageHelper;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Slime;
+import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -21,7 +18,7 @@ public class Nob {
 
     public Nob(NMLMobs nmlMobs, Location location) {
         this.nmlMobs = nmlMobs;
-        Slime nob = (Slime) NMLMobHelper.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob", false);
+        Slime nob = (Slime) NMLMobSystem.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob", false);
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§aNob the Glob");
 
         // have to do this for slimes
@@ -61,8 +58,6 @@ public class Nob {
                             }
                         }
                     }.runTaskTimer(nmlMobs, 0L, 1L);
-                } else if (nob.isDead()) {
-                    cancel();
                 }
             }
         }.runTaskTimer(nmlMobs, 0L, 150L);
@@ -71,12 +66,12 @@ public class Nob {
     private void bigJump(Slime nob, MobStats mobStats) {
         nob.setAI(false);
 
-        NMLMobHelper.useAbility(nob, 20, Particle.ITEM_SLIME, new BukkitRunnable() {
+        NMLMobSystem.useAbility(nob, 20, Particle.ITEM_SLIME, new BukkitRunnable() {
             @Override
             public void run() {
                 nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 1f, 1f);
                 nob.setAI(true);
-                nob.setMetadata("falling", new FixedMetadataValue(nmlMobs, true));
+                nob.setMetadata("no_fall_damage", new FixedMetadataValue(nmlMobs, true));
                 nob.setVelocity(new Vector());
 
                 new BukkitRunnable() {
@@ -119,12 +114,12 @@ public class Nob {
                             for (UUID uuid : hitEntityUUIDs) {
                                 if (Bukkit.getEntity(uuid) instanceof LivingEntity livingEntity) {
                                     Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, nob,
-                                            DamageConverter.multiplyDamageMap(DamageConverter.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
+                                    DamageHelper.multiplyDamageMap(DamageHelper.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
                                 }
                             }
 
                             nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 2f, .5f);
-                            nob.removeMetadata("falling", nmlMobs);
+                            nob.removeMetadata("no_fall_damage", nmlMobs);
                             cancel();
                         }
                     }

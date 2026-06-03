@@ -14,29 +14,50 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class Nob {
-    private NMLMobs nmlMobs;
+    private boolean imGonnaJump;
 
     public Nob(NMLMobs nmlMobs, Location location) {
-        this.nmlMobs = nmlMobs;
+        this.imGonnaJump = false;
         Slime nob = (Slime) NMLMobSystem.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob", false);
         MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§aNob the Glob");
 
-        // have to do this for slimes
+        // make nob tiny while still able to do damage
         nob.setSize(2);
         nob.getAttribute(Attribute.SCALE).setBaseValue(.5);
         nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
         nob.setHealth(mobStats.getMaxHealth());
 
+        // custom ai
         new BukkitRunnable() {
             @Override
             public void run() {
+                LivingEntity target = nob.getTarget();
+                double bigJumpChance = 20;
+                double bigJumpMultiplier = 0;
+
                 if (nob.isDead()) {
                     cancel();
                     return;
                 }
 
-                if (nob.getTarget() != null) {
-                    new BukkitRunnable() {
+                // distance multiplier
+                if (target != null) {
+                    double distance = target.getLocation().distance(nob.getLocation());
+
+                    distance = Math.min(distance, 10);
+                    bigJumpMultiplier += (distance * .2); // + x2 chance to do a big jump if over 10 blocks away, scaling linearly
+                }
+
+                // health multiplier
+                double healthRatio = nob.getHealth() / mobStats.getMaxHealth();
+                bigJumpMultiplier += 4 - (4 * healthRatio); // + x4 chance to do a big jump based on low health, scaling linearly
+
+                bigJumpChance = Math.clamp(bigJumpMultiplier * bigJumpChance, 20, 100);
+
+                if (!imGonnaJump && Math.random() * 100 < bigJumpChance) {
+                    imGonnaJump = true;
+
+                    new BukkitRunnable() { // whole runnable is to make sure that nob is always on the ground whenever he tries to big jump
                         int groundedTicks = 0;
 
                         @Override
@@ -53,17 +74,17 @@ public class Nob {
                             }
 
                             if (groundedTicks >= 3) {
-                                bigJump(nob, mobStats);
+                                bigJump(nmlMobs, nob, mobStats);
                                 cancel();
                             }
                         }
-                    }.runTaskTimer(nmlMobs, 0L, 1L);
+                    }.runTaskTimer(nmlMobs, 0, 1);
                 }
             }
-        }.runTaskTimer(nmlMobs, 0L, 150L);
+        }.runTaskTimer(nmlMobs, 20, 20);
     }
 
-    private void bigJump(Slime nob, MobStats mobStats) {
+    private void bigJump(NMLMobs nmlMobs, Slime nob, MobStats mobStats) {
         nob.setAI(false);
 
         NMLMobSystem.useAbility(nob, 20, Particle.ITEM_SLIME, new BukkitRunnable() {
@@ -120,6 +141,7 @@ public class Nob {
 
                             nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 2f, .5f);
                             nob.removeMetadata("no_fall_damage", nmlMobs);
+                            imGonnaJump = false;
                             cancel();
                         }
                     }

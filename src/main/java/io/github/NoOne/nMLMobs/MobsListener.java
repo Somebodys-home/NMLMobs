@@ -25,10 +25,9 @@ public class MobsListener implements Listener {
     public void nmlMobDamagePlayer(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof LivingEntity damager) || !(event.getEntity() instanceof LivingEntity target)) return;
         if (damager.hasMetadata("nml")) {
-            event.setCancelled(true);
-
             MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml(damager.getName());
 
+            event.setCancelled(true);
             Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager, DamageHelper.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), true));
         }
     }
@@ -42,7 +41,7 @@ public class MobsListener implements Listener {
 
     @EventHandler
     public void stopSlimeSplits(SlimeSplitEvent event) {
-        if (event.getEntity().hasMetadata("nml")) event.setCancelled(true);
+        event.setCancelled(true);
     }
 
     @EventHandler

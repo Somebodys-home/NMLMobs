@@ -93,6 +93,7 @@ public class Nob {
                 nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 1f, 1f);
                 nob.setAI(true);
                 nob.setMetadata("no_fall_damage", new FixedMetadataValue(nmlMobs, true));
+                nob.setMetadata("no_knockback", new FixedMetadataValue(nmlMobs, true));
                 nob.setVelocity(new Vector());
 
                 new BukkitRunnable() {
@@ -114,7 +115,6 @@ public class Nob {
                             double radius = 3;
                             int particleCount = 200;
                             Location base = nob.getLocation().clone().add(0, 0.5, 0);
-                            HashSet<UUID> hitEntityUUIDs = new HashSet<>();
 
                             for (int i = 0; i < particleCount; i++) {
                                 double r = radius * Math.sqrt(Math.random());
@@ -127,20 +127,15 @@ public class Nob {
                             }
 
                             for (Entity entity : nob.getWorld().getNearbyEntities(nob.getLocation(), 3, 1, 3)) {
-                                if (!entity.equals(nob)) {
-                                    hitEntityUUIDs.add(entity.getUniqueId());
-                                }
-                            }
-
-                            for (UUID uuid : hitEntityUUIDs) {
-                                if (Bukkit.getEntity(uuid) instanceof LivingEntity livingEntity) {
+                                if (!entity.equals(nob) && entity instanceof LivingEntity livingEntity) {
                                     Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, nob,
-                                    DamageHelper.multiplyDamageMap(DamageHelper.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
+                                            DamageHelper.multiplyDamageMap(DamageHelper.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
                                 }
                             }
 
                             nob.getWorld().playSound(nob.getLocation(), Sound.BLOCK_SLIME_BLOCK_BREAK, 2f, .5f);
                             nob.removeMetadata("no_fall_damage", nmlMobs);
+                            nob.removeMetadata("no_knockback", nmlMobs);
                             imGonnaJump = false;
                             cancel();
                         }

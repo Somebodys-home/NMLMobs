@@ -5,9 +5,9 @@ main: io.github.NoOne.nMLMobs.NMLMobs
 api-version: '26.3'
 load: POSTWORLD
 depend:
-  - DamagePlugin
+  - NMLDamages
 loadbefore:
-  - DamagePlugin
+  - NMLDamages
 commands:
   nmlSummon:
     description: Spawns a custom NML mob

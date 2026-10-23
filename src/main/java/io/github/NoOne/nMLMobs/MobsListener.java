@@ -1,7 +1,7 @@
 package io.github.NoOne.nMLMobs;
 
-import io.github.NoOne.damagePlugin.customDamage.CustomDamageEvent;
-import io.github.NoOne.damagePlugin.customDamage.DamageHelper;
+import io.github.NoOne.nMLDamages.CustomDamageEvent;
+import io.github.NoOne.nMLDamages.DamageHelper;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import io.papermc.paper.event.entity.EntityKnockbackEvent;
 import org.bukkit.Bukkit;

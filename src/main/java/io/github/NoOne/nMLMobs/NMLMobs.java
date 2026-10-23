@@ -1,6 +1,5 @@
 package io.github.NoOne.nMLMobs;
 
-import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLMobs.commands.NMLKillCommand;
 import io.github.NoOne.nMLMobs.commands.NMLSummonCommand;
 import io.github.NoOne.nMLMobs.mobs.NMLMobSystem;
@@ -9,7 +8,6 @@ import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class NMLMobs extends JavaPlugin {
-    private DamagePlugin damagePlugin;
     private MobStatsYMLConfig mobStatsYmlConfig;
     private MobStatsYMLManager mobStatsYMLManager;
     private MobHealthBarManager mobHealthBarManager;
@@ -17,7 +15,6 @@ public final class NMLMobs extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        damagePlugin = JavaPlugin.getPlugin(DamagePlugin.class);
 
         mobStatsYmlConfig = new MobStatsYMLConfig(this, "mobstats");
         nmlMobSystem = new NMLMobSystem(this);
@@ -38,10 +35,6 @@ public final class NMLMobs extends JavaPlugin {
         mobHealthBarManager.stop();
     }
 
-    public DamagePlugin getDamagePlugin() {
-        return damagePlugin;
-    }
-
     public MobStatsYMLConfig getMobProfileConfig() {
         return mobStatsYmlConfig;
     }
@@ -54,7 +47,7 @@ public final class NMLMobs extends JavaPlugin {
         return mobHealthBarManager;
     }
 
-    public NMLMobSystem getNmlMobTemplate() {
+    public NMLMobSystem getNmlMobSystem() {
         return nmlMobSystem;
     }
 }

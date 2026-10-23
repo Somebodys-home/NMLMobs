@@ -88,8 +88,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.Somebodys-home</groupId>
-            <artifactId>DamagePlugin</artifactId>
-            <version>cc3c886727</version>
+            <artifactId>NMLDamages</artifactId>
+            <version>703bea28b6</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

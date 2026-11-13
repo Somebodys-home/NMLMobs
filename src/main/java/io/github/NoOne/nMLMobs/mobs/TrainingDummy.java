@@ -1,19 +1,29 @@
 package io.github.NoOne.nMLMobs.mobs;
 
+import io.github.NoOne.nMLMobs.NMLMobSystem;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class TrainingDummy {
-    public TrainingDummy(NMLMobs nmlMobs, Location location) {
-        IronGolem trainingDummy = (IronGolem) NMLMobSystem.makeNMlMob(nmlMobs, location, EntityType.IRON_GOLEM, "§cTraining Dummy", false);
-        MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§cTraining Dummy");
+public class TrainingDummy extends NMLMob {
+    public TrainingDummy() {
+        super("§cTraining Dummy");
+    }
+
+    @Override
+    public void spawn(NMLMobs nmlMobs, Location location) {
+        Location clone = location.clone();
+
+        clone.setPitch(0);
+
+        IronGolem trainingDummy = (IronGolem) NMLMobSystem.makeNMlMob(nmlMobs, clone, EntityType.IRON_GOLEM, name, false);
 
         trainingDummy.setAI(false);
+        addToMap(trainingDummy);
 
         new BukkitRunnable() {
             @Override

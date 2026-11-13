@@ -1,5 +1,6 @@
 package io.github.NoOne.nMLMobs.commands;
 
+import io.github.NoOne.nMLMobs.NMLMobSystem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +22,7 @@ public class NMLKillCommand implements CommandExecutor, TabCompleter {
             String name = args[0];
 
             for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), 100, 100, 100)) {
-                if (entity != player && entity.hasMetadata("nml") && entity.getName().toLowerCase().contains(name)) {
+                if (entity != player && NMLMobSystem.isNMLMob(entity) && entity.getName().toLowerCase().contains(name)) {
                     entity.remove();
                 }
             }

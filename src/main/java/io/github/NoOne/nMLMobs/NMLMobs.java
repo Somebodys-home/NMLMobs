@@ -2,28 +2,28 @@ package io.github.NoOne.nMLMobs;
 
 import io.github.NoOne.nMLMobs.commands.NMLKillCommand;
 import io.github.NoOne.nMLMobs.commands.NMLSummonCommand;
-import io.github.NoOne.nMLMobs.mobs.NMLMobSystem;
-import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLConfig;
+import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class NMLMobs extends JavaPlugin {
+    private static NMLMobs instance;
     private MobStatsYMLConfig mobStatsYmlConfig;
     private MobStatsYMLManager mobStatsYMLManager;
     private MobHealthBarManager mobHealthBarManager;
-    private NMLMobSystem nmlMobSystem;
 
     @Override
     public void onEnable() {
-
+        instance = this;
         mobStatsYmlConfig = new MobStatsYMLConfig(this, "mobstats");
-        nmlMobSystem = new NMLMobSystem(this);
 
         mobStatsYMLManager = new MobStatsYMLManager(this);
         mobStatsYmlConfig.loadConfig();
 
         mobHealthBarManager = new MobHealthBarManager(this);
         mobHealthBarManager.start();
+
+        NMLMobSystem.startNoDamageTickTask();
 
         getCommand("nmlsummon").setExecutor(new NMLSummonCommand(this));
         getCommand("nmlkill").setExecutor(new NMLKillCommand());
@@ -33,6 +33,10 @@ public final class NMLMobs extends JavaPlugin {
     @Override
     public void onDisable() {
         mobHealthBarManager.stop();
+    }
+
+    public static NMLMobs getInstance() {
+        return instance;
     }
 
     public MobStatsYMLConfig getMobProfileConfig() {
@@ -45,9 +49,5 @@ public final class NMLMobs extends JavaPlugin {
 
     public MobHealthBarManager getMobHealthBarManager() {
         return mobHealthBarManager;
-    }
-
-    public NMLMobSystem getNmlMobSystem() {
-        return nmlMobSystem;
     }
 }

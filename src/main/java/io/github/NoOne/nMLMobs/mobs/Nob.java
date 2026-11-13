@@ -2,32 +2,41 @@ package io.github.NoOne.nMLMobs.mobs;
 
 import io.github.NoOne.nMLDamages.CustomDamageEvent;
 import io.github.NoOne.nMLDamages.DamageHelper;
+import io.github.NoOne.nMLMobs.NMLMobSystem;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Slime;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import java.util.HashSet;
-import java.util.UUID;
 
-public class Nob {
+public class Nob extends NMLMob {
     private boolean imGonnaJump;
 
-    public Nob(NMLMobs nmlMobs, Location location) {
+    public Nob() {
+        super("§aNob the Glob");
+    }
+
+    @Override
+    public void spawn(NMLMobs nmlMobs, Location location) {
         this.imGonnaJump = false;
-        Slime nob = (Slime) NMLMobSystem.makeNMlMob(nmlMobs, location, EntityType.SLIME, "§aNob the Glob", false);
-        MobStats mobStats = nmlMobs.getMobStatsYMLManager().getMobStatsFromYml("§aNob the Glob");
+        Slime nob = (Slime) NMLMobSystem.makeNMlMob(nmlMobs, location, EntityType.SLIME, name, false);
 
         // make nob tiny while still able to do damage
         nob.setSize(2);
         nob.getAttribute(Attribute.SCALE).setBaseValue(.5);
         nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
         nob.setHealth(mobStats.getMaxHealth());
+        addToMap(nob);
 
-        // custom ai
+        // custom ai for doing le big jumps
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -57,7 +66,9 @@ public class Nob {
                 if (!imGonnaJump && Math.random() * 100 < bigJumpChance) {
                     imGonnaJump = true;
 
-                    new BukkitRunnable() { // whole runnable is to make sure that nob is always on the ground whenever he tries to big jump
+                    // whole runnable is to make sure that nob is always on the ground whenever he tries to big jump
+                    // basically, nob has to stay on the ground for at least 3 ticks before he can start to charge a jump
+                    new BukkitRunnable() {
                         int groundedTicks = 0;
 
                         @Override
@@ -126,8 +137,8 @@ public class Nob {
                                 nob.getWorld().spawnParticle(Particle.ITEM_SLIME, loc, 1, 0, 0, 0, 0);
                             }
 
-                            for (Entity entity : nob.getWorld().getNearbyEntities(nob.getLocation(), 3, 1, 3)) {
-                                if (!entity.equals(nob) && entity instanceof LivingEntity livingEntity) {
+                            for (LivingEntity livingEntity : nob.getWorld().getNearbyLivingEntities(nob.getLocation(), 3, 1, 3)) {
+                                if (!livingEntity.equals(nob)) {
                                     Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, nob,
                                             DamageHelper.multiplyDamageMap(DamageHelper.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
                                 }

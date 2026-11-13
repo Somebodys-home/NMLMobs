@@ -1,6 +1,7 @@
 package io.github.NoOne.nMLMobs.mobstats;
 
 import io.github.NoOne.nMLMobs.NMLMobs;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class MobStatsYMLManager {
@@ -11,12 +12,11 @@ public class MobStatsYMLManager {
     }
 
     public MobStats getMobStatsFromYml(String name) {
-        // removing color from name
-        if (name.contains("§")) {
-            name = name.replaceAll("§[0-9a-fk-or]", "");
-        }
+        name = ChatColor.stripColor(name);
 
-        if (!config.isConfigurationSection(name)) return null;
+        if (!config.isConfigurationSection(name)) {
+            return null;
+        }
 
         int level = config.getInt(name + ".level");
 

@@ -1,10 +1,11 @@
 package io.github.NoOne.nMLMobs.mobs;
 
-import io.github.NoOne.nMLDamages.CustomDamageEvent;
 import io.github.NoOne.nMLDamages.DamageHelper;
+import io.github.NoOne.nMLDamages.event.CustomDamageEvent;
 import io.github.NoOne.nMLMobs.NMLMobSystem;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
+import io.github.NoOne.nMLPlayerStats.statSystem.PlayerStat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -32,8 +33,8 @@ public class Nob extends NMLMob {
         // make nob tiny while still able to do damage
         nob.setSize(2);
         nob.getAttribute(Attribute.SCALE).setBaseValue(.5);
-        nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
-        nob.setHealth(mobStats.getMaxHealth());
+        nob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getStatValue(PlayerStat.MAX_HEALTH));
+        nob.setHealth(mobStats.getStatValue(PlayerStat.MAX_HEALTH));
         addToMap(nob);
 
         // custom ai for doing le big jumps
@@ -58,7 +59,7 @@ public class Nob extends NMLMob {
                 }
 
                 // health multiplier
-                double healthRatio = nob.getHealth() / mobStats.getMaxHealth();
+                double healthRatio = nob.getHealth() / mobStats.getStatValue(PlayerStat.MAX_HEALTH);
                 bigJumpMultiplier += 4 - (4 * healthRatio); // + x4 chance to do a big jump based on low health, scaling linearly
 
                 bigJumpChance = Math.clamp(bigJumpMultiplier * bigJumpChance, 20, 100);
@@ -139,8 +140,7 @@ public class Nob extends NMLMob {
 
                             for (LivingEntity livingEntity : nob.getWorld().getNearbyLivingEntities(nob.getLocation(), 3, 1, 3)) {
                                 if (!livingEntity.equals(nob)) {
-                                    Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, nob,
-                                            DamageHelper.multiplyDamageMap(DamageHelper.convertStringIntMap2DamageTypes(mobStats.getAllDamages()), 2), true));
+                                    Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, nob, DamageHelper.multiplyDamageMap(DamageHelper.convertPlayerStatsToDamage(mobStats.getAllDamages()), 2)));
                                 }
                             }
 

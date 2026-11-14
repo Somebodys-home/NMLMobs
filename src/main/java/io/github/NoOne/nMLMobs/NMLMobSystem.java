@@ -2,6 +2,7 @@ package io.github.NoOne.nMLMobs;
 
 import io.github.NoOne.nMLMobs.mobs.NMLMob;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
+import io.github.NoOne.nMLPlayerStats.statSystem.PlayerStat;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -35,8 +36,8 @@ public class NMLMobSystem {
 
         nmlMob.setCustomName(name);
         nmlMob.setCustomNameVisible(true);
-        nmlMob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getMaxHealth());
-        nmlMob.setHealth(mobStats.getMaxHealth());
+        nmlMob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(mobStats.getStatValue(PlayerStat.MAX_HEALTH));
+        nmlMob.setHealth(mobStats.getStatValue(PlayerStat.MAX_HEALTH));
         nmlMob.setPersistent(false);
 
         return nmlMob;
@@ -79,8 +80,8 @@ public class NMLMobSystem {
         nmlMobsMap.put(nmlMob, livingEntity);
     }
 
-    public static boolean isNMLMob(Entity entity) {
-        return nmlMobsMap.containsKey(entity);
+    public static boolean isNMLMob(LivingEntity livingEntity) {
+        return nmlMobsMap.containsKey(livingEntity);
     }
 
     public static NMLMob getNmlMob(LivingEntity livingEntity) {

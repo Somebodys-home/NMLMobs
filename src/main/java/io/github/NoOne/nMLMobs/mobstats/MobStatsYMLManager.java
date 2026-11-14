@@ -32,8 +32,8 @@ public class MobStatsYMLManager {
         int radiantDamage = config.getInt(name + ".radiantDamage");
         int necroticDamage = config.getInt(name + ".necroticDamage");
         int pureDamage = config.getInt(name + ".pureDamage");
-        int critchance = config.getInt(name + ".critchance");
-        int critdamage = config.getInt(name + ".critdamage");
+        int critChance = config.getInt(name + ".critChance");
+        int critDamage = config.getInt(name + ".critDamage");
 
         int evasion = config.getInt(name + ".evasion");
         int defense = config.getInt(name + ".defense");
@@ -47,7 +47,7 @@ public class MobStatsYMLManager {
         int necroticResist = config.getInt(name + ".necroticResist");
 
         return new MobStats(level, maxHealth, maxOverhealth, physicalDamage, fireDamage, coldDamage, earthDamage,
-                lightningDamage, airDamage, radiantDamage, necroticDamage, pureDamage, critchance, critdamage,
+                lightningDamage, airDamage, radiantDamage, necroticDamage, pureDamage, critChance, critDamage,
                 evasion, defense, physicalResist, fireResist, coldResist, earthResist, lightningResist,
                 airResist, radiantResist, necroticResist);
     }

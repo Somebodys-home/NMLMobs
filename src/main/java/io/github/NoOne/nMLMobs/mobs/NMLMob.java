@@ -69,4 +69,8 @@ public class NMLMob {
     public boolean canBeDamaged(LivingEntity attacker) {
         return !noDamageTicks.containsKey(attacker.getUniqueId());
     }
+
+    public MobStats getMobStats() {
+        return mobStats;
+    }
 }

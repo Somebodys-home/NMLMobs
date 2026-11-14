@@ -11,8 +11,8 @@ Nob the Glob:
   radiantDamage: 0
   necroticDamage: 0
   pureDamage: 0
-  critchance: 0
-  critdamage: 0
+  critChance: 0
+  critDamage: 0
   evasion: 0
   defense: 0
   physicalResist: 0
@@ -37,8 +37,8 @@ Training Dummy:
   radiantDamage: 0
   necroticDamage: 0
   pureDamage: 0
-  critchance: 0
-  critdamage: 0
+  critChance: 0
+  critDamage: 0
   evasion: 0
   defense: 0
   physicalResist: 0

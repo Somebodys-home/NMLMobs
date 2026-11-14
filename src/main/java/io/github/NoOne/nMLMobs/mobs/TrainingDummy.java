@@ -3,6 +3,7 @@ package io.github.NoOne.nMLMobs.mobs;
 import io.github.NoOne.nMLMobs.NMLMobSystem;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
+import io.github.NoOne.nMLPlayerStats.statSystem.PlayerStat;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
@@ -43,7 +44,7 @@ public class TrainingDummy extends NMLMob {
         NMLMobSystem.useAbility(trainingDummy, 30, Particle.END_ROD, new BukkitRunnable() {
             @Override
             public void run() {
-                trainingDummy.setHealth(mobStats.getMaxHealth());
+                trainingDummy.setHealth(mobStats.getStatValue(PlayerStat.MAX_HEALTH));
 
                 if (trainingDummy.getLocation().toVector().subtract(location.toVector()).length() > .5) {
                     trainingDummy.teleport(location);

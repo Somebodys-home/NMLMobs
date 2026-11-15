@@ -22,13 +22,14 @@ public class MobsListener implements Listener {
 
     @EventHandler
     public void nmlMobDamagePlayer(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof LivingEntity damager) || !(event.getEntity() instanceof LivingEntity target)) return;
-        if (NMLMobSystem.isNMLMob(damager)) {
-            MobStats mobStats = NMLMobSystem.getNmlMob(damager).getMobStats();
-
-            event.setCancelled(true);
-            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager, mobStats));
+        if (!(event.getDamager() instanceof LivingEntity damager) || !(event.getEntity() instanceof LivingEntity target) || !NMLMobSystem.isNMLMob(damager)) {
+            return;
         }
+
+        MobStats mobStats = NMLMobSystem.getNmlMob(damager).getMobStats();
+
+        event.setCancelled(true);
+        Bukkit.getPluginManager().callEvent(new CustomDamageEvent(target, damager, mobStats, mobStats.getNoDamageTicks()));
     }
 
     @EventHandler

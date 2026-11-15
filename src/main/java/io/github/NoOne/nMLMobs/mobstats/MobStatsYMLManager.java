@@ -19,6 +19,7 @@ public class MobStatsYMLManager {
         }
 
         int level = config.getInt(name + ".level");
+        int noDamageTicks = config.getInt(name + ".noDamageTicks");
 
         double maxHealth = config.getDouble(name + ".maxHealth");
         double maxOverhealth = config.getDouble(name + ".maxOverhealth");
@@ -46,7 +47,8 @@ public class MobStatsYMLManager {
         int radiantResist = config.getInt(name + ".radiantResist");
         int necroticResist = config.getInt(name + ".necroticResist");
 
-        return new MobStats(level, maxHealth, maxOverhealth, physicalDamage, fireDamage, coldDamage, earthDamage,
+
+        return new MobStats(level, noDamageTicks, maxHealth, maxOverhealth, physicalDamage, fireDamage, coldDamage, earthDamage,
                 lightningDamage, airDamage, radiantDamage, necroticDamage, pureDamage, critChance, critDamage,
                 evasion, defense, physicalResist, fireResist, coldResist, earthResist, lightningResist,
                 airResist, radiantResist, necroticResist);

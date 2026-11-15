@@ -8,8 +8,9 @@ import static io.github.NoOne.nMLPlayerStats.statSystem.PlayerStat.*;
 
 public class MobStats extends Stats {
     private int level;
+    private int noDamageTicks;
 
-    public MobStats(int level, double maxHealth, double maxOverhealth,
+    public MobStats(int level, int noDamageTicks, double maxHealth, double maxOverhealth,
                  int physicalDamage, int fireDamage, int coldDamage, int earthDamage, int lightningDamage, int airDamage, int radiantDamage, int necroticDamage, int pureDamage,
                  int critChance, int critDamage,
                  int evasion, int defense, int physicalResist, int fireResist, int coldResist, int earthResist, int lightningResist, int airResist, int radiantResist, int necroticResist) {
@@ -42,13 +43,14 @@ public class MobStats extends Stats {
         }});
 
         this.level = level;
+        this.noDamageTicks = noDamageTicks;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public int getNoDamageTicks() {
+        return noDamageTicks;
     }
 }

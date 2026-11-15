@@ -1,5 +1,6 @@
 Nob the Glob:
   level: 1
+  noDamageTicks: 20
   maxHealth: 30
   maxOverhealth: 0.0
   physicalDamage: 2
@@ -26,6 +27,7 @@ Nob the Glob:
   necroticResist: 0
 Training Dummy:
   level: 99
+  noDamageTicks: 0
   maxHealth: 1000
   maxOverhealth: 0.0
   physicalDamage: 0

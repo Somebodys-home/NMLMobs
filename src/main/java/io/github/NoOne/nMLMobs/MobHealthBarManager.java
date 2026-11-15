@@ -9,6 +9,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -116,9 +118,9 @@ public class MobHealthBarManager {
         if (health < 1000) {
             return String.valueOf(health);
         } else if (health < 1000000) {
-            return health / 1000 + "K";
+            return new BigDecimal(health / 1000).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros() + "K";
         } else {
-            return health / 1000000 + "M";
+            return new BigDecimal(health / 1000000).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros() + "M";
         }
     }
 

@@ -1,6 +1,7 @@
 package io.github.NoOne.nMLMobs;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -9,16 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
 
 public class MobHealthBarManager {
     private NMLMobs nmlMobs;
     private BukkitTask healthBarTask;
-    private final HashMap<UUID, LivingEntity> lastDamagedMob = new HashMap<>();
-    private final HashMap<UUID, BossBar> healthBars = new HashMap<>();
-    private final HashMap<UUID, Integer> healthBarTimers = new HashMap<>();
-    private final int healthBarTimer = 100;
+    private HashMap<UUID, LivingEntity> lastDamagedMob = new HashMap<>();
+    private HashMap<UUID, BossBar> healthBars = new HashMap<>();
+    private HashMap<UUID, Integer> healthBarTimers = new HashMap<>();
+    private int healthBarTimer = 100;
 
     public MobHealthBarManager(NMLMobs nmlMobs) {
         this.nmlMobs = nmlMobs;
@@ -39,7 +39,7 @@ public class MobHealthBarManager {
 
                 double progress = Math.max(0, mob.getHealth() / mob.getMaxHealth());
                 bar.setProgress(progress);
-                bar.setTitle(removeLevelPrefix(mob.getName()) + " §f- §c" + (int) mob.getHealth() + " ❤");
+                bar.setTitle(removeLevelPrefix(mob.getName()) + " §f- §c" + shortenHealth(mob.getHealth()) + " ❤");
 
                 if (timeLeft > 0) {
                     if (!bar.getPlayers().contains(player) && !bar.getPlayers().contains(player)) bar.addPlayer(player);
@@ -80,22 +80,22 @@ public class MobHealthBarManager {
             healthBars.put(uuid, newBar);
         } else { // same mob
             BossBar healthBar = healthBars.get(uuid);
+
             if (healthBar != null) {
-                healthBar.setTitle(removeLevelPrefix(mob.getName()) + " §f- §c" + (int) mob.getHealth() + " ❤");
+                healthBar.setTitle(removeLevelPrefix(mob.getName()) + " §f- §c" + shortenHealth(mob.getHealth()) + " ❤");
                 healthBar.setProgress(mob.getHealth() / mob.getMaxHealth());
             }
+
             healthBarTimers.put(uuid, healthBarTimer);
         }
     }
 
-    private BossBar generateHealthBar(LivingEntity mob) {
-        int health = (int) mob.getHealth();
-        String name = mob.getName() + " §f- §c" + health + " ❤";
+    public void clearPlayerCache(Player player) {
+        UUID uuid = player.getUniqueId();
 
-        BossBar newBar = Bukkit.createBossBar(removeLevelPrefix(name), BarColor.RED, BarStyle.SEGMENTED_6);
-        newBar.setProgress(health / mob.getMaxHealth());
-
-        return newBar;
+        lastDamagedMob.remove(uuid);
+        healthBars.remove(uuid);
+        healthBarTimers.remove(uuid);
     }
 
     private void removePlayerData(UUID uuid) {
@@ -112,15 +112,24 @@ public class MobHealthBarManager {
         return string.replaceAll("§.Lv\\. §.\\d+\\s*", "");
     }
 
-    public void clearPlayerCache(Player player) {
-        UUID uuid = player.getUniqueId();
-
-        lastDamagedMob.remove(uuid);
-        healthBars.remove(uuid);
-        healthBarTimers.remove(uuid);
+    private String shortenHealth(double health) {
+        if (health < 1000) {
+            return String.valueOf(health);
+        } else if (health < 1000000) {
+            return health / 1000 + "K";
+        } else {
+            return health / 1000000 + "M";
+        }
     }
 
-    public LivingEntity getLastDamagedMob(Player player) {
-        return lastDamagedMob.get(player.getUniqueId());
+    private BossBar generateHealthBar(LivingEntity mob) {
+        double health = mob.getHealth();
+        double progress = mob.getHealth() / mob.getAttribute(Attribute.MAX_HEALTH).getValue();
+        String name = mob.getName() + " §f- §c" + shortenHealth(health) + " ❤";
+
+        BossBar newBar = Bukkit.createBossBar(removeLevelPrefix(name), BarColor.RED, BarStyle.SEGMENTED_6);
+        newBar.setProgress(progress);
+
+        return newBar;
     }
 }

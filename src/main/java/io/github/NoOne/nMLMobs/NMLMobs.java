@@ -6,7 +6,7 @@ import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLConfig;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class NMLMobs extends JavaPlugin {
+public class NMLMobs extends JavaPlugin {
     private static NMLMobs instance;
     private MobStatsYMLConfig mobStatsYmlConfig;
     private MobStatsYMLManager mobStatsYMLManager;

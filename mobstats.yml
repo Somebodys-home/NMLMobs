@@ -26,7 +26,7 @@ Nob the Glob:
   necroticResist: 0
 Training Dummy:
   level: 99
-  maxHealth: 1000
+  maxHealth: 1500000
   maxOverhealth: 0.0
   physicalDamage: 0
   fireDamage: 0

@@ -17,11 +17,9 @@ public class TrainingDummy extends NMLMob {
 
     @Override
     public void spawn(NMLMobs nmlMobs, Location location) {
-        Location clone = location.clone();
+        location.setPitch(0);
 
-        clone.setPitch(0);
-
-        IronGolem trainingDummy = (IronGolem) NMLMobSystem.makeNMlMob(nmlMobs, clone, EntityType.IRON_GOLEM, name, false);
+        IronGolem trainingDummy = (IronGolem) NMLMobSystem.makeNMlMob(nmlMobs, location, EntityType.IRON_GOLEM, name, false);
 
         trainingDummy.setAI(false);
         addToMap(trainingDummy);

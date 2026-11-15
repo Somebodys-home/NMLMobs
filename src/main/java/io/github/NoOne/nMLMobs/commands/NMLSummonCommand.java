@@ -28,7 +28,7 @@ public class NMLSummonCommand implements CommandExecutor, TabCompleter {
 
             switch (args[0]) {
                 case "nob" -> new Nob().spawn(nmlMobs, playerLocation);
-                case "dummy" -> new TrainingDummy();
+                case "dummy" -> new TrainingDummy().spawn(nmlMobs, playerLocation);
             }
         }
 

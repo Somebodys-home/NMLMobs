@@ -21,7 +21,7 @@ public class NMLKillCommand implements CommandExecutor, TabCompleter {
             String name = args[0];
 
             for (LivingEntity livingEntity : player.getWorld().getNearbyLivingEntities(player.getLocation(), 100, 100, 100)) {
-                if (livingEntity != player && NMLMobSystem.isNMLMob(livingEntity) && livingEntity.getName().toLowerCase().contains(name)) {
+                if (livingEntity != player && livingEntity.getName().toLowerCase().contains(name) && NMLMobSystem.isNMLMob(livingEntity)) {
                     livingEntity.remove();
                 }
             }

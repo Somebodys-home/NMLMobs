@@ -12,6 +12,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class NMLMobSystem {
     private static NMLMobs nmlMobs = NMLMobs.getInstance();
@@ -21,6 +22,10 @@ public class NMLMobSystem {
         new BukkitRunnable() {
             @Override
             public void run() {
+                for (Map.Entry<NMLMob, LivingEntity> entityEntry : nmlMobsMap.entrySet()) {
+                    //Bukkit.getPlayer("NoOne_NoBody").sendMessage("is " + entityEntry.getValue().getName() + " a nml mob? " + isNMLMob(entityEntry.getValue()));
+                }
+
                 // ticks down the no damage map for every nml mob and removes any mob that's dead in there
                 nmlMobsMap.entrySet().removeIf(nmlMobEntityEntry -> nmlMobEntityEntry.getValue().isDead());
                 nmlMobsMap.forEach((key, _) -> key.tickDownMap());
@@ -81,7 +86,7 @@ public class NMLMobSystem {
     }
 
     public static boolean isNMLMob(LivingEntity livingEntity) {
-        return nmlMobsMap.containsKey(livingEntity);
+        return nmlMobsMap.containsValue(livingEntity);
     }
 
     public static NMLMob getNmlMob(LivingEntity livingEntity) {

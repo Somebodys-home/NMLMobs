@@ -23,7 +23,7 @@ public class NMLMobs extends JavaPlugin {
         mobHealthBarManager = new MobHealthBarManager(this);
         mobHealthBarManager.start();
 
-        NMLMobSystem.startNoDamageTickTask();
+        NMLMobSystem.startDeadCheckTask();
 
         getCommand("nmlsummon").setExecutor(new NMLSummonCommand(this));
         getCommand("nmlkill").setExecutor(new NMLKillCommand());

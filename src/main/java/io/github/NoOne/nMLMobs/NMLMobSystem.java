@@ -12,23 +12,16 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class NMLMobSystem {
     private static NMLMobs nmlMobs = NMLMobs.getInstance();
     private static HashMap<NMLMob, LivingEntity> nmlMobsMap = new HashMap<>(); // tracks every nml mob and the object tied to it on the server
 
-    public static void startNoDamageTickTask() {
+    public static void startDeadCheckTask() {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (Map.Entry<NMLMob, LivingEntity> entityEntry : nmlMobsMap.entrySet()) {
-                    //Bukkit.getPlayer("NoOne_NoBody").sendMessage("is " + entityEntry.getValue().getName() + " a nml mob? " + isNMLMob(entityEntry.getValue()));
-                }
-
-                // ticks down the no damage map for every nml mob and removes any mob that's dead in there
                 nmlMobsMap.entrySet().removeIf(nmlMobEntityEntry -> nmlMobEntityEntry.getValue().isDead());
-                nmlMobsMap.forEach((key, _) -> key.tickDownMap());
             }
         }.runTaskTimer(nmlMobs, 0L, 1L);
     }

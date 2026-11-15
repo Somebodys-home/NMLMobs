@@ -115,13 +115,21 @@ public class MobHealthBarManager {
     }
 
     private String shortenHealth(double health) {
+        String string;
+
         if (health < 1000) {
-            return String.valueOf(health);
+            string = String.valueOf(health);
         } else if (health < 1000000) {
-            return new BigDecimal(health / 1000).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros() + "K";
+            string = new BigDecimal(health / 1000).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros() + "K";
         } else {
-            return new BigDecimal(health / 1000000).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros() + "M";
+            string = new BigDecimal(health / 1000000).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros() + "M";
         }
+
+        if (string.endsWith(".0")) {
+            string = string.replace(".0", "");
+        }
+
+        return string;
     }
 
     private BossBar generateHealthBar(LivingEntity mob) {

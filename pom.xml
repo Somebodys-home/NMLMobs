@@ -88,6 +88,11 @@
         </dependency>
         <dependency>
             <groupId>com.github.Somebodys-home</groupId>
+            <artifactId>NMLConfig</artifactId>
+            <version>4460f2fe0e</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Somebodys-home</groupId>
             <artifactId>NMLDamages</artifactId>
             <version>511f010b4d</version>
             <scope>provided</scope>
@@ -95,7 +100,7 @@
         <dependency>
             <groupId>com.github.Somebodys-home</groupId>
             <artifactId>NMLPlayerStats</artifactId>
-            <version>610edb810d</version>
+            <version>8883bb4a53</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

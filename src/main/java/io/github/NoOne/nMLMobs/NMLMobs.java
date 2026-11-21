@@ -1,24 +1,24 @@
 package io.github.NoOne.nMLMobs;
 
+import io.github.NoOne.nMLConfig.ConfigTemplate;
 import io.github.NoOne.nMLMobs.commands.NMLKillCommand;
 import io.github.NoOne.nMLMobs.commands.NMLSummonCommand;
-import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLConfig;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class NMLMobs extends JavaPlugin {
     private static NMLMobs instance;
-    private MobStatsYMLConfig mobStatsYmlConfig;
+    private ConfigTemplate mobStatsConfig;
     private MobStatsYMLManager mobStatsYMLManager;
     private MobHealthBarManager mobHealthBarManager;
 
     @Override
     public void onEnable() {
         instance = this;
-        mobStatsYmlConfig = new MobStatsYMLConfig(this, "mobstats");
+        mobStatsConfig = new ConfigTemplate(this, "mobstats");
 
         mobStatsYMLManager = new MobStatsYMLManager(this);
-        mobStatsYmlConfig.loadConfig();
+        mobStatsConfig.loadConfig();
 
         mobHealthBarManager = new MobHealthBarManager(this);
         mobHealthBarManager.start();
@@ -39,8 +39,8 @@ public class NMLMobs extends JavaPlugin {
         return instance;
     }
 
-    public MobStatsYMLConfig getMobProfileConfig() {
-        return mobStatsYmlConfig;
+    public ConfigTemplate getMobProfileConfig() {
+        return mobStatsConfig;
     }
 
     public MobStatsYMLManager getMobStatsYMLManager() {

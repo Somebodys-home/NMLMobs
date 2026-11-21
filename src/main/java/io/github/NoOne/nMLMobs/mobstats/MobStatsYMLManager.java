@@ -1,14 +1,12 @@
 package io.github.NoOne.nMLMobs.mobstats;
 
+import io.github.NoOne.nMLConfig.ConfigManager;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 
-public class MobStatsYMLManager {
-    private FileConfiguration config;
-
+public class MobStatsYMLManager extends ConfigManager {
     public MobStatsYMLManager(NMLMobs nmlMobs) {
-        config = nmlMobs.getMobProfileConfig().getConfig();
+        super(nmlMobs.getMobProfileConfig());
     }
 
     public MobStats getMobStatsFromYml(String name) {

@@ -118,7 +118,7 @@ public class MobHealthBarManager {
         String string;
 
         if (health < 1000) {
-            string = String.valueOf(health);
+            string = String.valueOf(new BigDecimal(health).setScale(1, RoundingMode.HALF_UP));
         } else if (health < 1000000) {
             string = new BigDecimal(health / 1000).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros() + "K";
         } else {
